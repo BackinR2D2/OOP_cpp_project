@@ -194,6 +194,37 @@ public:
         return is;
     }
 
+    virtual void serialize(ostream &os) const
+    {
+        os.write((char *)&id, sizeof(id));
+        os.write(nume.c_str(), nume.size() + 1);
+        os.write((char *)&salariu, sizeof(salariu));
+        os.write((char *)&vechime, sizeof(vechime));
+        os.write((char *)&nrProiecte, sizeof(nrProiecte));
+    }
+
+    static Angajat *deserialize(istream &is)
+    {
+        int id;
+        is.read((char *)&id, sizeof(id));
+
+        string nume;
+        char ch;
+        while (is.get(ch) && ch != '\0')
+            nume += ch;
+
+        double salariu;
+        is.read((char *)&salariu, sizeof(salariu));
+
+        int vechime;
+        is.read((char *)&vechime, sizeof(vechime));
+
+        int nrProiecte;
+        is.read((char *)&nrProiecte, sizeof(nrProiecte));
+
+        return new Angajat(nume, salariu, vechime, nrProiecte);
+    }
+
     virtual ~Angajat()
     {
         cout << "Dealocare " << this->nume << endl;
@@ -274,7 +305,7 @@ public:
         this->nrDeMockups = nrDeMockups;
     }
 
-    void display(ostream &os)
+    void display(ostream &os) override
     {
         Angajat::display(os);
         os << (this->abonamentFigmaActiv ? "Are abonament Figma activ" : "Nu are abonament Figma activ") << endl;
@@ -300,7 +331,7 @@ public:
         return is;
     }
 
-    ~Designer()
+    virtual ~Designer()
     {
         cout << "Dealocare designer " << this->nume << endl;
     }
@@ -447,7 +478,7 @@ public:
         return is;
     }
 
-    ~Programator()
+    virtual ~Programator()
     {
         delete[] this->limbaje;
         cout << "Dealocare programator " << this->nume << endl;
@@ -593,22 +624,22 @@ public:
 
         if (!wf)
         {
-            cout << "Nu se poate deschide fisierul" << endl;
+            cerr << "Nu se poate deschide fisierul" << endl;
         }
         else
         {
-            wf.write((char *)&this->length, sizeof(this->length));
+            wf.write((char *)&length, sizeof(length));
 
-            for (int i = 0; i < this->length; i++)
+            for (int i = 0; i < length; ++i)
             {
-                wf.write((char *)this->angajati[i], sizeof(*this));
+                angajati[i]->serialize(wf);
             }
 
             wf.close();
 
             if (!wf.good())
             {
-                cout << "Eroare la scrierea in fisier" << endl;
+                cerr << "Eroare la scrierea in fisier" << endl;
             }
         }
     }
@@ -618,22 +649,24 @@ public:
         ifstream rf("angajati.dat", ios::in | ios::binary);
         if (!rf)
         {
-            cout << "Nu se poate deschide fisierul" << endl;
+            cerr << "Nu se poate deschide fisierul" << endl;
         }
         else
         {
-            rf.read((char *)&this->length, sizeof(this->length));
+            rf.read((char *)&length, sizeof(length));
 
-            for (int i = 0; i < this->length; i++)
+            angajati = new Angajat *[length];
+
+            for (int i = 0; i < length; ++i)
             {
-                rf.read((char *)this->angajati[i], sizeof(*this));
+                angajati[i] = Angajat::deserialize(rf);
             }
 
             rf.close();
 
             if (!rf.good())
             {
-                cout << "Eroare la citirea din fisier" << endl;
+                cerr << "Eroare la citirea din fisier" << endl;
             }
         }
     }
@@ -682,12 +715,12 @@ int main()
 
     CompanieIT companie;
     companie += programator;
-    companie += designer;
+    // companie += designer;
     companie += designer1;
     companie += programator1;
 
-    companie.scriereAngajatiInFisierBinar();
-    companie.citireAngajatiDinFisierBinar();
+    // companie.scriereAngajatiInFisierBinar();
+    // companie.citireAngajatiDinFisierBinar();
     cout << companie << endl;
 
     delete[] limbaje;
