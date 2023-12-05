@@ -14,7 +14,7 @@ enum class LimbajeProgramare
     Python
 };
 
-ostream &operator<<(ostream &os, LimbajeProgramare limbaj)
+ostream& operator<<(ostream& os, LimbajeProgramare limbaj)
 {
     switch (limbaj)
     {
@@ -40,8 +40,8 @@ ostream &operator<<(ostream &os, LimbajeProgramare limbaj)
 class IProgramator
 {
 public:
-    virtual LimbajeProgramare *getLimbaje() = 0;
-    virtual void setLimbaje(LimbajeProgramare *limbaje, int limbajeStiute) = 0;
+    virtual LimbajeProgramare* getLimbaje() = 0;
+    virtual void setLimbaje(LimbajeProgramare* limbaje, int limbajeStiute) = 0;
     virtual bool getIsSeniorDeveloper() = 0;
     virtual void setIsSeniorDeveloper(bool isSeniorDeveloper) = 0;
     virtual int getCafeleConsumate() = 0;
@@ -59,29 +59,28 @@ public:
 
 class Angajat : public IProgramator, public IDesigner
 {
+private:
+    // getter & setter pentru accesibilitate
+    bool getAbonamentFigmaActiv() { return false; }
+    int getNrDeMockups() { return 0; }
+    void setAbonamentFigmaActiv(bool abonamentFigmaActiv) {}
+    void setNrDeMockups(int nrDeMockups) {}
+    LimbajeProgramare* getLimbaje()
+    {
+        LimbajeProgramare* limbaje = new LimbajeProgramare[0];
+        return limbaje;
+    }
+    void setLimbaje(LimbajeProgramare* limbaje, int limbajeStiute) {}
+    bool getIsSeniorDeveloper() { return false; }
+    void setIsSeniorDeveloper(bool isSeniorDeveloper) {}
+    int getCafeleConsumate() { return 0; }
+    void setCafeleConsumate(int cafeleConsumate) {}
 protected:
     int id;
     string nume;
     double salariu;
     int vechime;
     int nrProiecte;
-
-    // getter & setter pentru accesibilitate
-    bool getAbonamentFigmaActiv() { return false; }
-    int getNrDeMockups() { return 0; }
-    void setAbonamentFigmaActiv(bool abonamentFigmaActiv) {}
-    void setNrDeMockups(int nrDeMockups) {}
-    LimbajeProgramare *getLimbaje()
-    {
-        LimbajeProgramare *limbaje = new LimbajeProgramare[0];
-        return limbaje;
-    }
-    void setLimbaje(LimbajeProgramare *limbaje, int limbajeStiute) {}
-    bool getIsSeniorDeveloper() { return false; }
-    void setIsSeniorDeveloper(bool isSeniorDeveloper) {}
-    int getCafeleConsumate() { return 0; }
-    void setCafeleConsumate(int cafeleConsumate) {}
-
 public:
     Angajat()
     {
@@ -101,7 +100,7 @@ public:
         this->nrProiecte = nrProiecte;
     }
 
-    Angajat(const Angajat &a)
+    Angajat(const Angajat& a)
     {
         this->id = a.id;
         this->nume = a.nume;
@@ -110,7 +109,7 @@ public:
         this->nrProiecte = a.nrProiecte;
     }
 
-    Angajat &operator=(const Angajat &a)
+    Angajat& operator=(const Angajat& a)
     {
         this->id = a.id;
         this->nume = a.nume;
@@ -165,7 +164,7 @@ public:
         this->nrProiecte = nrProiecte;
     }
 
-    virtual void display(ostream &os)
+    virtual void display(ostream& os)
     {
         os << "ID: " << this->id << endl;
         os << "Nume: " << this->nume << endl;
@@ -174,7 +173,7 @@ public:
         os << "Numar de proiecte la care participa: " << this->nrProiecte << endl;
     }
 
-    virtual void readInput(istream &is)
+    virtual void readInput(istream& is)
     {
         is >> this->nume;
         is >> this->salariu;
@@ -182,31 +181,31 @@ public:
         is >> this->vechime;
     }
 
-    friend ostream &operator<<(ostream &os, Angajat *a)
+    friend ostream& operator<<(ostream& os, Angajat* a)
     {
         a->display(os);
         return os;
     }
 
-    friend istream &operator>>(istream &is, Angajat *a)
+    friend istream& operator>>(istream& is, Angajat* a)
     {
         a->readInput(is);
         return is;
     }
 
-    virtual void serialize(ostream &os) const
+    virtual void serialize(ostream& os) const
     {
-        os.write((char *)&id, sizeof(id));
+        os.write((char*)&id, sizeof(id));
         os.write(nume.c_str(), nume.size() + 1);
-        os.write((char *)&salariu, sizeof(salariu));
-        os.write((char *)&vechime, sizeof(vechime));
-        os.write((char *)&nrProiecte, sizeof(nrProiecte));
+        os.write((char*)&salariu, sizeof(salariu));
+        os.write((char*)&vechime, sizeof(vechime));
+        os.write((char*)&nrProiecte, sizeof(nrProiecte));
     }
 
-    static Angajat *deserialize(istream &is)
+    static Angajat* deserialize(istream& is)
     {
         int id;
-        is.read((char *)&id, sizeof(id));
+        is.read((char*)&id, sizeof(id));
 
         string nume;
         char ch;
@@ -214,13 +213,13 @@ public:
             nume += ch;
 
         double salariu;
-        is.read((char *)&salariu, sizeof(salariu));
+        is.read((char*)&salariu, sizeof(salariu));
 
         int vechime;
-        is.read((char *)&vechime, sizeof(vechime));
+        is.read((char*)&vechime, sizeof(vechime));
 
         int nrProiecte;
-        is.read((char *)&nrProiecte, sizeof(nrProiecte));
+        is.read((char*)&nrProiecte, sizeof(nrProiecte));
 
         return new Angajat(nume, salariu, vechime, nrProiecte);
     }
@@ -238,12 +237,12 @@ private:
     int nrDeMockups;
 
     // getter & setter pentru accesibilitate
-    LimbajeProgramare *getLimbaje()
+    LimbajeProgramare* getLimbaje()
     {
-        LimbajeProgramare *limbaje = new LimbajeProgramare[0];
+        LimbajeProgramare* limbaje = new LimbajeProgramare[0];
         return limbaje;
     }
-    void setLimbaje(LimbajeProgramare *limbaje, int limbajeStiute) {}
+    void setLimbaje(LimbajeProgramare* limbaje, int limbajeStiute) {}
     bool getIsSeniorDeveloper() { return false; }
     void setIsSeniorDeveloper(bool isSeniorDeveloper) {}
     int getCafeleConsumate() { return 0; }
@@ -262,7 +261,7 @@ public:
         this->nrDeMockups = 8;
     }
 
-    Designer(const Designer &d)
+    Designer(const Designer& d)
     {
         this->abonamentFigmaActiv = d.abonamentFigmaActiv;
         this->nrDeMockups = d.nrDeMockups;
@@ -273,7 +272,7 @@ public:
         this->nrProiecte = d.nrProiecte;
     }
 
-    Designer &operator=(const Designer &d)
+    Designer& operator=(const Designer& d)
     {
         this->abonamentFigmaActiv = d.abonamentFigmaActiv;
         this->nrDeMockups = d.nrDeMockups;
@@ -285,47 +284,47 @@ public:
         return *this;
     }
 
-    bool getAbonamentFigmaActiv()
+    bool getAbonamentFigmaActiv() override
     {
         return this->abonamentFigmaActiv;
     }
 
-    int getNrDeMockups()
+    int getNrDeMockups() override
     {
         return this->nrDeMockups;
     }
 
-    void setAbonamentFigmaActiv(bool abonamentFigmaActiv)
+    void setAbonamentFigmaActiv(bool abonamentFigmaActiv) override 
     {
         this->abonamentFigmaActiv = abonamentFigmaActiv;
     }
 
-    void setNrDeMockups(int nrDeMockups)
+    void setNrDeMockups(int nrDeMockups) override 
     {
         this->nrDeMockups = nrDeMockups;
     }
 
-    void display(ostream &os) override
+    void display(ostream& os) override
     {
         Angajat::display(os);
         os << (this->abonamentFigmaActiv ? "Are abonament Figma activ" : "Nu are abonament Figma activ") << endl;
         os << "Numarul de mockup-uri lucrate: " << this->nrDeMockups << endl;
     }
 
-    void readInput(istream &is)
+    void readInput(istream& is)
     {
         Angajat::readInput(is);
         is >> this->abonamentFigmaActiv;
         is >> this->nrDeMockups;
     }
 
-    friend ostream &operator<<(ostream &os, Designer *d)
+    friend ostream& operator<<(ostream& os, Designer* d)
     {
         d->display(os);
         return os;
     }
 
-    friend istream &operator>>(istream &is, Designer *d)
+    friend istream& operator>>(istream& is, Designer* d)
     {
         d->readInput(is);
         return is;
@@ -340,7 +339,7 @@ public:
 class Programator : public Angajat
 {
 private:
-    LimbajeProgramare *limbaje;
+    LimbajeProgramare* limbaje;
     int limbajeStiute;
     bool isSeniorDeveloper;
     int cafeleConsumate;
@@ -352,7 +351,7 @@ private:
     void setNrDeMockups(int nrDeMockups) {}
 
 public:
-    Programator(string nume, double salariu, int nrProiecte, int vechime, LimbajeProgramare *limbaje, bool isSeniorDeveloper, int cafeleConsumate, int limbajeStiute) : Angajat(nume, salariu, vechime, nrProiecte)
+    Programator(string nume, double salariu, int nrProiecte, int vechime, LimbajeProgramare* limbaje, bool isSeniorDeveloper, int cafeleConsumate, int limbajeStiute) : Angajat(nume, salariu, vechime, nrProiecte)
     {
         this->limbajeStiute = limbajeStiute;
         delete[] this->limbaje;
@@ -373,7 +372,7 @@ public:
         this->cafeleConsumate = 6;
     }
 
-    Programator(const Programator &p)
+    Programator(const Programator& p)
     {
         this->limbajeStiute = p.limbajeStiute;
         delete[] this->limbaje;
@@ -391,7 +390,7 @@ public:
         this->nrProiecte = p.nrProiecte;
     }
 
-    Programator &operator=(Programator &p)
+    Programator& operator=(Programator& p)
     {
         this->limbajeStiute = p.limbajeStiute;
         delete[] this->limbaje;
@@ -410,12 +409,12 @@ public:
         return *this;
     }
 
-    LimbajeProgramare *getLimbaje()
+    LimbajeProgramare* getLimbaje() override
     {
         return this->limbaje;
     }
 
-    void setLimbaje(LimbajeProgramare *limbaje, int limbajeStiute)
+    void setLimbaje(LimbajeProgramare* limbaje, int limbajeStiute) override
     {
         this->limbajeStiute = limbajeStiute;
         delete[] this->limbaje;
@@ -426,27 +425,27 @@ public:
         }
     }
 
-    bool getIsSeniorDeveloper()
+    bool getIsSeniorDeveloper() override
     {
         return this->isSeniorDeveloper;
     }
 
-    void setIsSeniorDeveloper(bool isSeniorDeveloper)
+    void setIsSeniorDeveloper(bool isSeniorDeveloper) override
     {
         this->isSeniorDeveloper = isSeniorDeveloper;
     }
 
-    int getCafeleConsumate()
+    int getCafeleConsumate() override
     {
         return this->cafeleConsumate;
     }
 
-    void setCafeleConsumate(int cafeleConsumate)
+    void setCafeleConsumate(int cafeleConsumate) override
     {
         this->cafeleConsumate = cafeleConsumate;
     }
 
-    void display(ostream &os) override
+    void display(ostream& os) override
     {
         Angajat::display(os);
         os << "Nr limbajelor de programare stiute: " << this->limbajeStiute << endl;
@@ -459,20 +458,20 @@ public:
         os << "Cafele consumate: " << this->cafeleConsumate << endl;
     }
 
-    void readInput(istream &is) override
+    void readInput(istream& is) override
     {
         Angajat::readInput(is);
         is >> this->cafeleConsumate;
         is >> this->isSeniorDeveloper;
     }
 
-    friend ostream &operator<<(ostream &os, Programator *p)
+    friend ostream& operator<<(ostream& os, Programator* p)
     {
         p->display(os);
         return os;
     }
 
-    friend istream &operator>>(istream &is, Programator *p)
+    friend istream& operator>>(istream& is, Programator* p)
     {
         p->readInput(is);
         return is;
@@ -490,7 +489,7 @@ class CompanieIT
 private:
     string denumire;
     double cifraDeAfaceri;
-    Angajat **angajati;
+    Angajat** angajati;
     int length;
 
 public:
@@ -504,7 +503,7 @@ public:
         return this->cifraDeAfaceri;
     }
 
-    Angajat **getAngajati()
+    Angajat** getAngajati()
     {
         return this->angajati;
     }
@@ -524,10 +523,10 @@ public:
         this->cifraDeAfaceri = cifraDeAfaceri;
     }
 
-    void setAngajati(Angajat **angajati, int length)
+    void setAngajati(Angajat** angajati, int length)
     {
         delete[] this->angajati;
-        this->angajati = new Angajat *[length];
+        this->angajati = new Angajat * [length];
         for (int i = 0; i < length; i++)
         {
             this->angajati[i] = angajati[i];
@@ -537,18 +536,18 @@ public:
     CompanieIT()
     {
         this->length = 0;
-        this->angajati = new Angajat *[0];
+        this->angajati = new Angajat * [0];
         this->denumire = "Luxoft";
         this->cifraDeAfaceri = 50'000'000;
     }
 
-    CompanieIT(string denumire, double cifraDeAfaceri, Angajat **angajati, int length)
+    CompanieIT(string denumire, double cifraDeAfaceri, Angajat** angajati, int length)
     {
         this->denumire = denumire;
         this->cifraDeAfaceri = cifraDeAfaceri;
         delete[] this->angajati;
         this->length = length;
-        this->angajati = new Angajat *[this->length];
+        this->angajati = new Angajat * [this->length];
         for (int i = 0; i < length; i++)
         {
             this->angajati[i] = angajati[i];
@@ -556,26 +555,26 @@ public:
         delete[] angajati;
     }
 
-    CompanieIT(const CompanieIT &c)
+    CompanieIT(const CompanieIT& c)
     {
         this->denumire = c.denumire;
         this->cifraDeAfaceri = c.cifraDeAfaceri;
         delete[] this->angajati;
         this->length = c.length;
-        this->angajati = new Angajat *[this->length];
+        this->angajati = new Angajat * [this->length];
         for (int i = 0; i < c.length; i++)
         {
             this->angajati[i] = c.angajati[i];
         }
     }
 
-    CompanieIT &operator=(const CompanieIT &c)
+    CompanieIT& operator=(const CompanieIT& c)
     {
         this->denumire = c.denumire;
         this->cifraDeAfaceri = c.cifraDeAfaceri;
         delete[] this->angajati;
         this->length = c.length;
-        this->angajati = new Angajat *[this->length];
+        this->angajati = new Angajat * [this->length];
         for (int i = 0; i < c.length; i++)
         {
             this->angajati[i] = c.angajati[i];
@@ -583,9 +582,9 @@ public:
         return *this;
     }
 
-    void operator+=(Angajat *angajat)
+    void operator+=(Angajat* angajat)
     {
-        Angajat **temp = new Angajat *[this->length + 1];
+        Angajat** temp = new Angajat * [this->length + 1];
 
         for (int i = 0; i < this->length; i++)
         {
@@ -599,9 +598,9 @@ public:
         this->angajati = temp;
     }
 
-    void operator-=(Angajat *angajat)
+    void operator-=(Angajat* angajat)
     {
-        Angajat **temp = new Angajat *[this->length - 1];
+        Angajat** temp = new Angajat * [this->length - 1];
 
         int contor = 0;
         for (int i = 0; i < this->length; i++)
@@ -628,7 +627,7 @@ public:
         }
         else
         {
-            wf.write((char *)&length, sizeof(length));
+            wf.write((char*)&length, sizeof(length));
 
             for (int i = 0; i < length; ++i)
             {
@@ -653,9 +652,9 @@ public:
         }
         else
         {
-            rf.read((char *)&length, sizeof(length));
+            rf.read((char*)&length, sizeof(length));
 
-            angajati = new Angajat *[length];
+            angajati = new Angajat * [length];
 
             for (int i = 0; i < length; ++i)
             {
@@ -671,7 +670,7 @@ public:
         }
     }
 
-    friend ostream &operator<<(ostream &os, const CompanieIT &list)
+    friend ostream& operator<<(ostream& os, const CompanieIT& list)
     {
         for (int i = 0; i < list.length; i++)
         {
@@ -680,14 +679,14 @@ public:
         return os;
     }
 
-    friend istream &operator>>(istream &is, CompanieIT &list)
+    friend istream& operator>>(istream& is, CompanieIT& list)
     {
         is >> list.denumire;
         is >> list.cifraDeAfaceri;
         return is;
     }
 
-    Angajat *operator[](int index)
+    Angajat* operator[](int index)
     {
         if (index >= this->length)
         {
@@ -704,23 +703,23 @@ public:
 
 int main()
 {
-    LimbajeProgramare *limbaje = new LimbajeProgramare[3];
+    LimbajeProgramare* limbaje = new LimbajeProgramare[3];
     limbaje[0] = LimbajeProgramare::C;
     limbaje[1] = LimbajeProgramare::JavaScript;
     limbaje[2] = LimbajeProgramare::Python;
-    Angajat *programator = new Programator("George Carlin", 4500, 5, 2, limbaje, false, 12, 3);
-    Angajat *designer = new Designer("John Doe", 6000, 10, 8);
-    Angajat *designer1 = new Designer("Jane Marcus", 1500, 1, 1, false, 4);
-    Angajat *programator1 = new Programator("Tim Berners Lee", 5000, 9, 3);
+    Angajat* programator = new Programator("George Carlin", 4500, 5, 2, limbaje, false, 12, 3);
+    Angajat* designer = new Designer("John Doe", 6000, 10, 8);
+    Angajat* designer1 = new Designer("Jane Marcus", 1500, 1, 1, false, 4);
+    Angajat* programator1 = new Programator("Tim Berners Lee", 5000, 9, 3);
 
     CompanieIT companie;
     companie += programator;
-    // companie += designer;
+    companie += designer;
     companie += designer1;
     companie += programator1;
 
-    // companie.scriereAngajatiInFisierBinar();
-    // companie.citireAngajatiDinFisierBinar();
+    companie.scriereAngajatiInFisierBinar();
+    companie.citireAngajatiDinFisierBinar();
     cout << companie << endl;
 
     delete[] limbaje;
